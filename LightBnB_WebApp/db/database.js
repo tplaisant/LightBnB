@@ -106,58 +106,27 @@ const getAllProperties = function (options, limit = 10) {
   FROM properties
   JOIN property_reviews ON properties.id = property_id
   `;
-
+  queryString += `WHERE 1 = 1`;
   // 3
   if (options.city) {
     queryParams.push(`%${options.city}%`);
-    queryString += `WHERE city LIKE $${queryParams.length} `;
-    if (options.minimum_price_per_night) {
-      queryParams.push(`${options.minimum_price_per_night}`);
-      queryString += `AND cost_per_night >= $${queryParams.length} `;
-    }
-    if (options.maximum_price_per_night) {
-      queryParams.push(`${options.maximum_price_per_night}`);
-      queryString += `AND cost_per_night <= $${queryParams.length} `;
-    }
-    if (options.minimum_rating) {
-      queryParams.push(`${options.minimum_rating }`);
-      queryString += `AND rating >= $${queryParams.length} `;
-    }
-
-  } else {
-    if (options.minimum_price_per_night) {
-      queryParams.push(`${options.minimum_price_per_night}`);
-      queryString += `WHERE cost_per_night >= $${queryParams.length} `;
-      if (options.maximum_price_per_night) {
-        queryParams.push(`${options.maximum_price_per_night}`);
-        queryString += `AND cost_per_night <= $${queryParams.length} `;
-      }
-      if (options.minimum_rating) {
-        queryParams.push(`${options.minimum_rating }`);
-        queryString += `AND rating >= $${queryParams.length} `;
-      }
-
-    } else {
-      if (options.maximum_price_per_night) {
-        queryParams.push(`${options.maximum_price_per_night}`);
-        queryString += `WHERE cost_per_night <= $${queryParams.length} `;
-        if (options.minimum_rating) {
-          queryParams.push(`${options.minimum_rating }`);
-          queryString += `AND rating >= $${queryParams.length} `;
-        }
-        
-      } else {
-        if (options.minimum_rating) {
-          queryParams.push(`${options.minimum_rating }`);
-          queryString += `WHERE rating >= $${queryParams.length} `;
-        }
-      }      
-    }
+    queryString += `AND city LIKE $${queryParams.length} `;
+  } 
+  if (options.minimum_price_per_night) {
+    queryParams.push(`${options.minimum_price_per_night}`);
+    queryString += `AND cost_per_night >= $${queryParams.length} `;
   }
-
+  if (options.maximum_price_per_night) {
+    queryParams.push(`${options.maximum_price_per_night}`);
+    queryString += `AND cost_per_night <= $${queryParams.length} `;
+  }
+  if (options.minimum_rating) {
+    queryParams.push(`${options.minimum_rating }`);
+    queryString += `AND rating >= $${queryParams.length} `;
+  }
   if (options.owner_id) {
     queryParams.push(`${options.owner_id}`);
-    queryString += `WHERE owner_id = $${queryParams.length} `;
+    queryString += `AND owner_id = $${queryParams.length} `;
   }
   
   // 4
